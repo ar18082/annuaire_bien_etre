@@ -20,6 +20,15 @@ class Images
     #[ORM\Column(type: Types::BLOB, nullable: true)]
     private $Image = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?CategorieDeServices $CategorieDeServices = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Internaute $Internaute = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Prestataire $Prestataire = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +54,42 @@ class Images
     public function setImage($Image): self
     {
         $this->Image = $Image;
+
+        return $this;
+    }
+
+    public function getCategorieDeServices(): ?CategorieDeServices
+    {
+        return $this->CategorieDeServices;
+    }
+
+    public function setCategorieDeServices(?CategorieDeServices $CategorieDeServices): self
+    {
+        $this->CategorieDeServices = $CategorieDeServices;
+
+        return $this;
+    }
+
+    public function getInternaute(): ?Internaute
+    {
+        return $this->Internaute;
+    }
+
+    public function setInternaute(?Internaute $Internaute): self
+    {
+        $this->Internaute = $Internaute;
+
+        return $this;
+    }
+
+    public function getPrestataire(): ?Prestataire
+    {
+        return $this->Prestataire;
+    }
+
+    public function setPrestataire(?Prestataire $Prestataire): self
+    {
+        $this->Prestataire = $Prestataire;
 
         return $this;
     }

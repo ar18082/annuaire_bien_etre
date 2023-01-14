@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CommentaireRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,20 @@ class Commentaire
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $Encodage = null;
+
+    #[ORM\OneToMany(mappedBy: 'Commentaire', targetEntity: Abus::class)]
+    private Collection $abuses;
+
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    private ?Prestataire $Prestataire = null;
+
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    private ?Internaute $Internaute = null;
+
+    public function __construct()
+    {
+        $this->abuses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +91,60 @@ class Commentaire
     public function setEncodage(?\DateTimeInterface $Encodage): self
     {
         $this->Encodage = $Encodage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Abus>
+     */
+    public function getAbuses(): Collection
+    {
+        return $this->abuses;
+    }
+
+    public function addAbuse(Abus $abuse): self
+    {
+        if (!$this->abuses->contains($abuse)) {
+            $this->abuses->add($abuse);
+            $abuse->setCommentaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAbuse(Abus $abuse): self
+    {
+        if ($this->abuses->removeElement($abuse)) {
+            // set the owning side to null (unless already changed)
+            if ($abuse->getCommentaire() === $this) {
+                $abuse->setCommentaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPrestataire(): ?Prestataire
+    {
+        return $this->Prestataire;
+    }
+
+    public function setPrestataire(?Prestataire $Prestataire): self
+    {
+        $this->Prestataire = $Prestataire;
+
+        return $this;
+    }
+
+    public function getInternaute(): ?Internaute
+    {
+        return $this->Internaute;
+    }
+
+    public function setInternaute(?Internaute $Internaute): self
+    {
+        $this->Internaute = $Internaute;
 
         return $this;
     }
