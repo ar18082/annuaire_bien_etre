@@ -21,7 +21,7 @@ class Utilisateur
     private ?string $MotDePasse = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $AdresseN° = null;
+    private ?string $AdresseN = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $AdresseRue = null;
@@ -87,14 +87,14 @@ class Utilisateur
         return $this;
     }
 
-    public function getAdresseN°(): ?string
+    public function getAdresseN(): ?string
     {
-        return $this->AdresseN°;
+        return $this->AdresseN;
     }
 
-    public function setAdresseN°(?string $AdresseN°): self
+    public function setAdresseN(?string $AdresseN): self
     {
-        $this->AdresseN° = $AdresseN°;
+        $this->AdresseN = $AdresseN;
 
         return $this;
     }

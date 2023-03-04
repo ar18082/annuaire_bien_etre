@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{controller_name}}{% endblock %}
+
+{% block body %}
+{# ruban dynamique  voir pour mettre la recherche au dessuss du carrousel 
+    - faire la gestion d'image 
+    -dashboard  voir dans loulaview pour les images 
+    - integrer l'image dans la db dans la table creer le form et faire l(intégration d'image par l'admin )
+#}
+<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+        <img src="../img/slider/slider-1.jpg" class="d-block w-100" alt="...">
+    </div>
+    {% for i in 2..3 %}
+    <div class="carousel-item">
+      <img src="../img/slider/slider-{{i}}.jpg" class="d-block w-100" alt="...">
+    </div>
+  {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+   
+</div>
+{# left column list category  
+ - à voir comme le mettre sur le coté voir boostrap ou css ou une balise 
+ - controller categoryController 
+ - avoir l'entity qui convient 
+ faire la liaison 
+#}
+<div class='list-category'>
+  <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+      <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+      <span class="fs-4">Liste des catégories</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+    {% for i in 1..5 %}
+      <li class="nav-item">
+        <a href="#" class="nav-link active" aria-current="page">
+          <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+          categorie {{i}}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    <hr>    
+  </div>
+</div>
+
+
+{# top service du mois 
+    choisir un sous categ au hasard par mois et le mettre en avant 
+ #}
+<div class = "topServiceDuMois">
+  <h1>Top service du mois</h1>
+  <div class="card text-bg-dark">
+    <img src="..." class="card-img" alt="...">
+    <div class="card-img-overlay">
+      <h5 class="card-title">Card title</h5>
+      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+      <p class="card-text"><small>Last updated 3 mins ago</small></p>
+    </div>
+  </div>
+</div>
+ {# Prestataire récent 
+    afficher le dernier prestataire inscrit 
+    voir avec la dateTime et faire une requete qui dit de récupérer le plus récent 
+    à réflechir 
+
+ #}
+<div class="Prestataire récent">
+  <h1>Prestataire récent</h1>
+  <div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="card" style="width: 18rem;">
+          <img src="..." class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="card" style="width: 18rem;">
+          <img src="..." class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+      </div>
+    
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  
+</div>
+
+
+
+
+
+{% endblock %}
