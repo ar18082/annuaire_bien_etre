@@ -20,6 +20,12 @@ class Abus
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $Encodage = null;
 
+    #[ORM\ManyToOne(inversedBy: 'abuses')]
+    private ?Internaute $Internaute = null;
+
+    #[ORM\ManyToOne(inversedBy: 'abuses')]
+    private ?Commentaire $Commentaire = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +51,30 @@ class Abus
     public function setEncodage(?\DateTimeInterface $Encodage): self
     {
         $this->Encodage = $Encodage;
+
+        return $this;
+    }
+
+    public function getInternaute(): ?Internaute
+    {
+        return $this->Internaute;
+    }
+
+    public function setInternaute(?Internaute $Internaute): self
+    {
+        $this->Internaute = $Internaute;
+
+        return $this;
+    }
+
+    public function getCommentaire(): ?Commentaire
+    {
+        return $this->Commentaire;
+    }
+
+    public function setCommentaire(?Commentaire $Commentaire): self
+    {
+        $this->Commentaire = $Commentaire;
 
         return $this;
     }

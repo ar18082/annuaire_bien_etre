@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+
+{% block title %}Hello InscriptionController!{% endblock %}
+
+{% block body %}
+
+<div class="container">
+<h1>inscription prestataire</h1>
+
+{{ form_start(form) }}
+
+{{ form_widget(form) }}
+
+
+{{ form_end(form) }}
+</div>
+
+
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

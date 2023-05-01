@@ -1,0 +1,43 @@
+
+.ruban_container{
+    text-align: center;
+
+}
+
+
+.ruban {
+    width: 87%;
+    background-repeat: no-repeat;
+    height: 450px;    
+    background-size:cover;
+    animation-name: fade-in;
+    animation-duration: 8s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards; 
+    animation-iteration-count: infinite;
+    background-position: 10%;
+    display: inline-block;
+    
+    /*transition: opacity 2s linear;*/
+}
+  
+@keyframes fade-in {
+    0% {
+      
+        background-image: url(../img/slider/slider-1.jpg);  
+                 
+    }
+    50%{
+       
+        
+        background-image: url(../img/slider/slider-2.jpg);  
+    }
+       
+    100%{
+             
+        background-image: url(../img/slider/slider-3.jpg);  
+    }
+}
+
+
+

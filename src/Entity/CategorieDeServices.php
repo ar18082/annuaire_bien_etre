@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CategorieDeServicesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,18 @@ class CategorieDeServices
 
     #[ORM\Column(nullable: true)]
     private ?bool $Valide = null;
+
+    #[ORM\OneToMany(mappedBy: 'CategorieDeServices', targetEntity: Proposer::class)]
+    private Collection $proposers;
+
+    #[ORM\OneToMany(mappedBy: 'CategorieDeServices', targetEntity: Promotion::class)]
+    private Collection $promotions;
+
+    public function __construct()
+    {
+        $this->proposers = new ArrayCollection();
+        $this->promotions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +89,66 @@ class CategorieDeServices
     public function setValide(?bool $Valide): self
     {
         $this->Valide = $Valide;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Proposer>
+     */
+    public function getProposers(): Collection
+    {
+        return $this->proposers;
+    }
+
+    public function addProposer(Proposer $proposer): self
+    {
+        if (!$this->proposers->contains($proposer)) {
+            $this->proposers->add($proposer);
+            $proposer->setCategorieDeServices($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProposer(Proposer $proposer): self
+    {
+        if ($this->proposers->removeElement($proposer)) {
+            // set the owning side to null (unless already changed)
+            if ($proposer->getCategorieDeServices() === $this) {
+                $proposer->setCategorieDeServices(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Promotion>
+     */
+    public function getPromotions(): Collection
+    {
+        return $this->promotions;
+    }
+
+    public function addPromotion(Promotion $promotion): self
+    {
+        if (!$this->promotions->contains($promotion)) {
+            $this->promotions->add($promotion);
+            $promotion->setCategorieDeServices($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromotion(Promotion $promotion): self
+    {
+        if ($this->promotions->removeElement($promotion)) {
+            // set the owning side to null (unless already changed)
+            if ($promotion->getCategorieDeServices() === $this) {
+                $promotion->setCategorieDeServices(null);
+            }
+        }
 
         return $this;
     }
