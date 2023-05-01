@@ -1,0 +1,25 @@
+.categorie_mois{
+    text-align: center;
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & .card{
+        width: 30%;
+        
+
+        
+
+        & img{
+            opacity: 0.4 ;
+        }
+        
+    }
+
+    .contenu_categ_mois{
+        margin: 5rem 1rem 1rem 1rem;
+    }
+
+    
+}

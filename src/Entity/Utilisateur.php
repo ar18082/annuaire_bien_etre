@@ -5,29 +5,39 @@ namespace App\Entity;
 use App\Repository\UtilisateurRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $Email = null;
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
+
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $MotDePasse = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $AdresseN = null;
+    private ?string $AdresseNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $AdresseRue = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $Inscription = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $inscription = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $TypeUtilisateur = null;
@@ -35,28 +45,27 @@ class Utilisateur
     #[ORM\Column(nullable: true)]
     private ?int $NbEssaisInfructueux = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column]
     private ?bool $Banni = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $InscriptConf = null;
-
-   
+    #[ORM\Column]
+    private ?bool $inscriptConfirm = null;
 
     #[ORM\ManyToOne(inversedBy: 'utilisateurs')]
-    private ?CodePostal $CodePostal = null;
+    private ?Internaute $internaute = null;
 
     #[ORM\ManyToOne(inversedBy: 'utilisateurs')]
-    private ?Commune $Commune = null;
-
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Internaute $Internaute = null;
-
-    #[ORM\ManyToOne(inversedBy: 'utilisateurs')]
-    private ?Localite $Localite = null;
-
-    #[ORM\OneToOne(mappedBy: 'Utilisateur', cascade: ['persist', 'remove'])]
     private ?Prestataire $prestataire = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private $isVerified = false;
+
+    public function __construct()
+    {
+        $this->inscription = new \DateTime(); 
+        $this->Banni = false;
+        $this->inscriptConfirm =false;
+    }
 
     public function getId(): ?int
     {
@@ -65,36 +74,77 @@ class Utilisateur
 
     public function getEmail(): ?string
     {
-        return $this->Email;
+        return $this->email;
     }
 
-    public function setEmail(?string $Email): self
+    public function setEmail(string $email): self
     {
-        $this->Email = $Email;
+        $this->email = $email;
 
         return $this;
     }
 
-    public function getMotDePasse(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->MotDePasse;
+        return (string) $this->email;
     }
 
-    public function setMotDePasse(?string $MotDePasse): self
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        $this->MotDePasse = $MotDePasse;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getAdresseN(): ?string
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
-        return $this->AdresseN;
+        return $this->password;
     }
 
-    public function setAdresseN(?string $AdresseN): self
+    public function setPassword(string $password): self
     {
-        $this->AdresseN = $AdresseN;
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getAdresseNumber(): ?string
+    {
+        return $this->AdresseNumber;
+    }
+
+    public function setAdresseNumber(?string $AdresseNumber): self
+    {
+        $this->AdresseNumber = $AdresseNumber;
 
         return $this;
     }
@@ -113,12 +163,12 @@ class Utilisateur
 
     public function getInscription(): ?\DateTimeInterface
     {
-        return $this->Inscription;
+        return $this->inscription;
     }
 
-    public function setInscription(?\DateTimeInterface $Inscription): self
+    public function setInscription(\DateTimeInterface $inscription): self
     {
-        $this->Inscription = $Inscription;
+        $this->inscription = $inscription;
 
         return $this;
     }
@@ -152,71 +202,33 @@ class Utilisateur
         return $this->Banni;
     }
 
-    public function setBanni(?bool $Banni): self
+    public function setBanni(bool $Banni): self
     {
         $this->Banni = $Banni;
 
         return $this;
     }
 
-    public function isInscriptConf(): ?bool
+    public function isInscriptConfirm(): ?bool
     {
-        return $this->InscriptConf;
+        return $this->inscriptConfirm;
     }
 
-    public function setInscriptConf(?bool $InscriptConf): self
+    public function setInscriptConfirm(bool $inscriptConfirm): self
     {
-        $this->InscriptConf = $InscriptConf;
-
-        return $this;
-    }
-
-    
-
-    public function getCodePostal(): ?CodePostal
-    {
-        return $this->CodePostal;
-    }
-
-    public function setCodePostal(?CodePostal $CodePostal): self
-    {
-        $this->CodePostal = $CodePostal;
-
-        return $this;
-    }
-
-    public function getCommune(): ?Commune
-    {
-        return $this->Commune;
-    }
-
-    public function setCommune(?Commune $Commune): self
-    {
-        $this->Commune = $Commune;
+        $this->inscriptConfirm = $inscriptConfirm;
 
         return $this;
     }
 
     public function getInternaute(): ?Internaute
     {
-        return $this->Internaute;
+        return $this->internaute;
     }
 
-    public function setInternaute(?Internaute $Internaute): self
+    public function setInternaute(?Internaute $internaute): self
     {
-        $this->Internaute = $Internaute;
-
-        return $this;
-    }
-
-    public function getLocalite(): ?Localite
-    {
-        return $this->Localite;
-    }
-
-    public function setLocalite(?Localite $Localite): self
-    {
-        $this->Localite = $Localite;
+        $this->internaute = $internaute;
 
         return $this;
     }
@@ -228,17 +240,20 @@ class Utilisateur
 
     public function setPrestataire(?Prestataire $prestataire): self
     {
-        // unset the owning side of the relation if necessary
-        if ($prestataire === null && $this->prestataire !== null) {
-            $this->prestataire->setUtilisateur(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($prestataire !== null && $prestataire->getUtilisateur() !== $this) {
-            $prestataire->setUtilisateur($this);
-        }
-
         $this->prestataire = $prestataire;
+
+        return $this;
+    }
+
+    
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

@@ -47,6 +47,9 @@ class Prestataire
     #[ORM\OneToOne(inversedBy: 'prestataire', cascade: ['persist', 'remove'])]
     private ?Utilisateur $Utilisateur = null;
 
+    #[ORM\OneToMany(mappedBy: 'prestataire', targetEntity: Utilisateur::class)]
+    private Collection $utilisateurs;
+
     public function __construct()
     {
         $this->favoris = new ArrayCollection();
@@ -55,6 +58,7 @@ class Prestataire
         
         $this->promotions = new ArrayCollection();
         $this->stages = new ArrayCollection();
+        $this->utilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -270,6 +274,36 @@ class Prestataire
     public function setUtilisateur(?Utilisateur $Utilisateur): self
     {
         $this->Utilisateur = $Utilisateur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Utilisateur>
+     */
+    public function getUtilisateurs(): Collection
+    {
+        return $this->utilisateurs;
+    }
+
+    public function addUtilisateur(Utilisateur $utilisateur): self
+    {
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs->add($utilisateur);
+            $utilisateur->setPrestataire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUtilisateur(Utilisateur $utilisateur): self
+    {
+        if ($this->utilisateurs->removeElement($utilisateur)) {
+            // set the owning side to null (unless already changed)
+            if ($utilisateur->getPrestataire() === $this) {
+                $utilisateur->setPrestataire(null);
+            }
+        }
 
         return $this;
     }

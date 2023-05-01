@@ -13,6 +13,7 @@ class CategorieDeServicesController extends AbstractController
     {
         return $this->render('categorie_de_services/index.html.twig', [
             'controller_name' => 'CategorieDeServicesController',
+            
         ]);
     }
 }

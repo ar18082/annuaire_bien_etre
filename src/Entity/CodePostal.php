@@ -15,15 +15,15 @@ class CodePostal
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $CodePostal = null;
 
-    #[ORM\OneToMany(mappedBy: 'CodePostal', targetEntity: Utilisateur::class)]
-    private Collection $utilisateurs;
+    #[ORM\OneToMany(mappedBy: 'codePostal', targetEntity: Ville::class)]
+    private Collection $villes;
 
     public function __construct()
     {
-        $this->utilisateurs = new ArrayCollection();
+        $this->villes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -36,7 +36,7 @@ class CodePostal
         return $this->CodePostal;
     }
 
-    public function setCodePostal(?string $CodePostal): self
+    public function setCodePostal(string $CodePostal): self
     {
         $this->CodePostal = $CodePostal;
 
@@ -44,32 +44,37 @@ class CodePostal
     }
 
     /**
-     * @return Collection<int, Utilisateur>
+     * @return Collection<int, Ville>
      */
-    public function getUtilisateurs(): Collection
+    public function getVilles(): Collection
     {
-        return $this->utilisateurs;
+        return $this->villes;
     }
 
-    public function addUtilisateur(Utilisateur $utilisateur): self
+    public function addVille(Ville $ville): self
     {
-        if (!$this->utilisateurs->contains($utilisateur)) {
-            $this->utilisateurs->add($utilisateur);
-            $utilisateur->setCodePostal($this);
+        if (!$this->villes->contains($ville)) {
+            $this->villes->add($ville);
+            $ville->setCodePostal($this);
         }
 
         return $this;
     }
 
-    public function removeUtilisateur(Utilisateur $utilisateur): self
+    public function removeVille(Ville $ville): self
     {
-        if ($this->utilisateurs->removeElement($utilisateur)) {
+        if ($this->villes->removeElement($ville)) {
             // set the owning side to null (unless already changed)
-            if ($utilisateur->getCodePostal() === $this) {
-                $utilisateur->setCodePostal(null);
+            if ($ville->getCodePostal() === $this) {
+                $ville->setCodePostal(null);
             }
         }
 
         return $this;
+    }
+
+    public Function __toString(){
+        
+        return $this->CodePostal;
     }
 }

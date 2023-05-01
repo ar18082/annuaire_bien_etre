@@ -36,6 +36,9 @@ class Internaute
     #[ORM\OneToOne(mappedBy: 'Internaute', cascade: ['persist', 'remove'])]
     private ?Position $position = null;
 
+    #[ORM\OneToMany(mappedBy: 'internaute', targetEntity: Utilisateur::class)]
+    private Collection $utilisateurs;
+
     
 
     public function __construct()
@@ -43,6 +46,7 @@ class Internaute
         $this->favoris = new ArrayCollection();
         $this->abuses = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->utilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -194,6 +198,36 @@ class Internaute
         }
 
         $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Utilisateur>
+     */
+    public function getUtilisateurs(): Collection
+    {
+        return $this->utilisateurs;
+    }
+
+    public function addUtilisateur(Utilisateur $utilisateur): self
+    {
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs->add($utilisateur);
+            $utilisateur->setInternaute($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUtilisateur(Utilisateur $utilisateur): self
+    {
+        if ($this->utilisateurs->removeElement($utilisateur)) {
+            // set the owning side to null (unless already changed)
+            if ($utilisateur->getInternaute() === $this) {
+                $utilisateur->setInternaute(null);
+            }
+        }
 
         return $this;
     }
