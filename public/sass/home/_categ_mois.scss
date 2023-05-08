@@ -6,7 +6,7 @@
     align-items: center;
 
     & .card{
-        width: 30%;
+        width: 95%;
         
 
         
@@ -18,8 +18,22 @@
     }
 
     .contenu_categ_mois{
-        margin: 5rem 1rem 1rem 1rem;
-    }
+        margin: 1rem auto;
+        position: absolute;
+        bottom: -2rem;
+        padding: 1.25rem;
+        width: 100%;
+    } 
 
     
+}
+
+@media screen and ( min-width:map-get($version,pc)){
+    .categorie_mois{
+        
+    
+        & .card{
+            width: 60%;
+        }
+    }
 }

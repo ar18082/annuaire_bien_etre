@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
 
 {% block header %}
 <body class="text-center">
@@ -8,31 +8,19 @@
 
 {% block body %}
 <div class='container'>
-    
-  <main class="form-signin w-100 m-auto">
-    <form>
-      <img class="mb-4" src="" alt="" width="72" height="57">
-      <h1 class="h3 mb-3 fw-normal">Connectez-vous</h1>
+  <h1>Connectez-vous</h1>
+</div>
+{#<div class='container'>
+  <div class='alert alert-danger'>{{error_message}}</div>
+</div>#}
+<div class='container container_connexion'>
+  {{ form_start(form,{'attr': {'class': 'form_connexion'}}) }}
+  {{ form_row(form.Email, {'attr': {'class': 'connexion_email'}}) }}
+  {{ form_row(form.Password, {'attr': {'class': 'connexion_password'}})}}
+  {{form_row(form.submit, {'attr': {'class': 'connexion_submit'}})}}
+  {{ form_end(form)}} 
 
-      <div class="form-floating">
-        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-        <label for="floatingInput">E-mail</label>
-      </div>
-      <div class="form-floating">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-        <label for="floatingPassword">Mot de passe</label>
-      </div>
-
-      <div class="checkbox mb-3">
-        <label>
-          <input type="checkbox" value="remember-me"> souvenir de moi
-        </label>
-      </div>
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Connexion</button>
-      
-    </form>
-  </main>
-
+  <h6><a href="{{path('app_connexion')}}">Mot de passe oublié ? </a></h6>
 </div>
 {% endblock %}
 

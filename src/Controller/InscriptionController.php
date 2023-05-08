@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,7 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 
 /*les entity*/
-
 use App\Entity\Internaute;
 use App\Entity\Prestataire;
 use App\Entity\Commune;
@@ -23,12 +23,15 @@ use App\Form\InscriptionType;
 use App\Form\PrestataireType;
 use App\Form\UtilisateurType;
 
+use function PHPUnit\Framework\isEmpty;
+
 class InscriptionController extends AbstractController
 {
-    #[Route('/inscription', name: 'app_inscription')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/inscription/{id}', name: 'app_inscription')]
+    public function index($id, Request $request, EntityManagerInterface $entityManager): Response
     {
-       
+       // recupérer l'id qui doit passer dans le mail 
+
         $form = $this->createForm(InscriptionType::class);
         $form->handleRequest($request);
 
@@ -37,76 +40,97 @@ class InscriptionController extends AbstractController
             $data = $form->getData();
 
 
-            if($data['Prestataire'] == true){
-                return $this->redirectToRoute('app_inscription_prestataire');
-            }else{
-                return $this->redirectToRoute('app_connexion');
-            }
+            $nom = $data['Nom'];
+            $prenom = $data['Prenom'];
+            $adresseRue = $data['AdresseRue'];
+            $adresseNumber = $data['AdresseNumber'];
+            $region = $data['region'];
+            $ville = $data['ville'];
+            $cp = $data['codePostal'];
+            $role = $data['Prestataire'];
+            $nom_societe = $data['Nom_societe'];
+            $telephone = $data['Numtel'];
+            $tva = $data['Numtva'];
+            $siteInternet = $data['SiteInternet'];
+            $inscriptionComplete = true;
+            $presta ="";
 
-        }
+            $repository = $entityManager->getRepository(Utilisateur::class);
+            $utilisateur = $repository->find($id);
+
+            if(!Empty($nom_societe)){
+                
+                $prestataire = new Prestataire;
+                $prestataire ->setNom($nom_societe);
+                $prestataire ->setNumtel($telephone);
+                $prestataire ->setNumtva($tva);
+                $prestataire ->setSiteInternet($siteInternet);                
+                $entityManager->persist($prestataire);
+                $entityManager->flush();
+                $repository = $entityManager->getRepository(Prestataire::class);
+                $presta = $repository->findOneBy(['Nom' => $nom_societe]);
+            };      
             
 
-       /* 
-        intégrer les data dans la base de donnée et faire les relations entre les 3 tables
-       $jsonUrl = $this->getParameter('kernel.project_dir') . '/public/json/Region-Ville-CodePostal.json';
-        $jsonData = file_get_contents($jsonUrl);
-        $datas = json_decode($jsonData, true);
-        */
+            $internaute = new Internaute;
+            $internaute ->setNom($nom);
+            $internaute->setPrenom($prenom);
+            $entityManager->persist($internaute);
+            $entityManager->flush();
+
+            
+            $repository = $entityManager->getRepository(Internaute::class);
+            $inter = $repository->findOneBy(['Nom' => $nom, 'Prenom' => $prenom]);
+            
+       
+             
+            
+
+            $utilisateur ->setAdresseRue($adresseRue);
+            $utilisateur ->setAdresseNumber($adresseNumber);
+            $utilisateur ->setInscriptConfirm($inscriptionComplete);
+            $utilisateur ->setInternaute($inter);
+
+            if(!Empty($presta)){
+                $utilisateur ->setPrestataire($presta);
+            }
+            if($role){
+                $r[] = 'ROLE_PRESTATAIRE';  
+                
+            }else{
+                $r[] = 'ROLE_INTERNAUTE';
+            }
+            $utilisateur->setRoles($r);
+
+            $entityManager->flush();
+           
+            // il va falloir faire les relations entre ville,region et cp avec utilisateur 
+            // envisager de l'envoyer en db persist et flush 
+
+            
+            
+
+          
+
         
-       // $repository = $entityManager->getRepository(Utilisateur::class);
-       // $utilisateur = $repository->findOneBy([], ['id' => 'desc']);
-        
-        //$nom = $request->get('nom');
+
+
+            
+            return $this->redirectToRoute('app_login');
+            
+
+        }   
+
 
         return $this->render('inscription/index.html.twig', [
-                'form'   =>  $form->  createView(),
-              
-              //'nom' => $nom, 
-              //'datas' =>$datas
+            'form'   =>  $form->  createView(),           
+             
 
         ]);
     }
 
 
-    #[Route('/inscription_prestataire', name: 'app_inscription_prestataire')]
-    public function InscriptionPrestataire(Request $request, EntityManagerInterface $entityManager): Response
-    {
-       
-        $form = $this->createForm(PrestataireType::class);
-        $form->handleRequest($request);
-
-        if($form -> isSubmitted() && $form-> isValid()){
-            // get data et traitement des date vers les différents entity 
-            $data = $form->getData();
-
-
-            
-            return $this->redirectToRoute('app_connexion');
-            
-
-        }
-            
-
-       /* 
-        intégrer les data dans la base de donnée et faire les relations entre les 3 tables
-       $jsonUrl = $this->getParameter('kernel.project_dir') . '/public/json/Region-Ville-CodePostal.json';
-        $jsonData = file_get_contents($jsonUrl);
-        $datas = json_decode($jsonData, true);
-        */
-        
-       // $repository = $entityManager->getRepository(Utilisateur::class);
-       // $utilisateur = $repository->findOneBy([], ['id' => 'desc']);
-        
-        //$nom = $request->get('nom');
-
-        return $this->render('inscription/prestataire.html.twig', [
-                'form'   =>  $form->  createView(),
-              
-              //'nom' => $nom, 
-              //'datas' =>$datas
-
-        ]);
-    }
+    
 
     
 }

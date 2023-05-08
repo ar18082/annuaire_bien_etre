@@ -46,7 +46,7 @@ class VilleRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->andWhere('c.region = :region')
             ->setParameter('region', $region)
-            //->orderBy('c.region', 'ASC')
+            ->orderBy('c.VilleName', 'ASC')
             ->getQuery()
             ->getResult();
     }
