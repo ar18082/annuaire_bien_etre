@@ -16,6 +16,7 @@ class ConnexionType extends AbstractType
         $builder
             ->add('Email', EmailType::class, [
                 'label' => 'Votre E-mail', 
+                
                 //'placeholder' => 'name@example.com',
 
             ])

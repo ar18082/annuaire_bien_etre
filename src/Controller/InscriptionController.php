@@ -71,7 +71,7 @@ class InscriptionController extends AbstractController
                 $presta = $repository->findOneBy(['Nom' => $nom_societe]);
             };      
             
-
+//introduire une condition qui defferencie presta de inter 
             $internaute = new Internaute;
             $internaute ->setNom($nom);
             $internaute->setPrenom($prenom);
