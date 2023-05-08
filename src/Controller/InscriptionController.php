@@ -53,37 +53,40 @@ class InscriptionController extends AbstractController
             $tva = $data['Numtva'];
             $siteInternet = $data['SiteInternet'];
             $inscriptionComplete = true;
-            $presta ="";
+            
+          
 
             $repository = $entityManager->getRepository(Utilisateur::class);
-            $utilisateur = $repository->find($id);
-
-            if(!Empty($nom_societe)){
+            $utilisateur = $repository->find($id);  
+            
+            if($role){
+                if(!Empty($nom_societe)){
                 
-                $prestataire = new Prestataire;
-                $prestataire ->setNom($nom_societe);
-                $prestataire ->setNumtel($telephone);
-                $prestataire ->setNumtva($tva);
-                $prestataire ->setSiteInternet($siteInternet);                
-                $entityManager->persist($prestataire);
-                $entityManager->flush();
-                $repository = $entityManager->getRepository(Prestataire::class);
-                $presta = $repository->findOneBy(['Nom' => $nom_societe]);
-            };      
-            
-//introduire une condition qui defferencie presta de inter 
-            $internaute = new Internaute;
-            $internaute ->setNom($nom);
-            $internaute->setPrenom($prenom);
-            $entityManager->persist($internaute);
-            $entityManager->flush();
+                    $prestataire = new Prestataire;
+                    $prestataire ->setNom($nom_societe);
+                    $prestataire ->setNumtel($telephone);
+                    $prestataire ->setNumtva($tva);
+                    $prestataire ->setSiteInternet($siteInternet);                
+                    $entityManager->persist($prestataire);
+                    $entityManager->flush();
+                    $repository = $entityManager->getRepository(Prestataire::class);
+                    $presta = $repository->findOneBy(['Nom' => $nom_societe]);
+                };
 
-            
-            $repository = $entityManager->getRepository(Internaute::class);
-            $inter = $repository->findOneBy(['Nom' => $nom, 'Prenom' => $prenom]);
-            
-       
-             
+                $r[] = 'ROLE_PRESTATAIRE';  
+                
+            }else{
+                $internaute = new Internaute;
+                $internaute ->setNom($nom);
+                $internaute->setPrenom($prenom);
+                $entityManager->persist($internaute);
+                $entityManager->flush();
+                $r[] = 'ROLE_INTERNAUTE';
+                $repository = $entityManager->getRepository(Internaute::class);
+                $inter = $repository->findOneBy(['Nom' => $nom, 'Prenom' => $prenom]); 
+            }
+
+              
             
 
             $utilisateur ->setAdresseRue($adresseRue);
@@ -94,12 +97,7 @@ class InscriptionController extends AbstractController
             if(!Empty($presta)){
                 $utilisateur ->setPrestataire($presta);
             }
-            if($role){
-                $r[] = 'ROLE_PRESTATAIRE';  
-                
-            }else{
-                $r[] = 'ROLE_INTERNAUTE';
-            }
+            
             $utilisateur->setRoles($r);
 
             $entityManager->flush();
