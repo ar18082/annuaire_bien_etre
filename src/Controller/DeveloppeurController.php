@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Annotation\IsGranted;
 
 
 //Entity
@@ -28,7 +29,7 @@ class DeveloppeurController extends AbstractController
         
    
 
-        foreach ($datas as $data) {
+        /*foreach ($datas as $data) {
             $regionName = $data['region'];            
 
             $repository = $entityManager->getRepository(Region::class);
@@ -65,7 +66,7 @@ class DeveloppeurController extends AbstractController
     
         
             
-        }
+        }*/
 
         return $this->render('developpeur/index.html.twig', [
             'controller_name' => 'DeveloppeurController',

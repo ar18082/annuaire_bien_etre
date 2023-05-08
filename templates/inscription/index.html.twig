@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-
+    
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
 
@@ -8,11 +8,23 @@
 {% block body %}
 
 <div class="container">
-<h1>ici le formulaire d'inscription</h1>
+<h1>Formulaire d'inscription</h1>
 
 {{ form_start(form) }}
-
-{{ form_widget(form) }}
+{{ form_row(form.Nom) }}
+{{ form_row(form.Prenom) }}
+{{ form_row(form.AdresseRue) }}
+{{ form_row(form.AdresseNumber) }}
+{{ form_row(form.region, {'attr': {'class': 'search_region'}}) }}
+{{ form_row(form.ville, {'attr': {'class': 'search_ville'}}) }}
+{{ form_row(form.codePostal, {'attr': {'class': 'search_codePostal'}}) }}
+{{ form_row(form.Prestataire) }}
+<div id='p'>
+{{form_row(form.Nom_societe)}}
+{{ form_row(form.Numtel) }}
+{{ form_row(form.Numtva) }}
+{{ form_row(form.SiteInternet) }}
+</div>
 
 
 {{ form_end(form) }}
@@ -25,5 +37,9 @@
 
 {% endblock %}
 
-{% block footer %}
+{% block javascripts %}
+{{ parent() }}
+<script src="{{asset('js/inscription.js')}}"></script>
+
+
 {% endblock %}

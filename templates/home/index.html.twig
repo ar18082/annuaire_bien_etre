@@ -1,119 +1,39 @@
 {% extends 'base.html.twig' %}
-
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
 {% block title %}{{controller_name}}{% endblock %}
 
 {% block body %}
-<header class="py-3 mb-4 border-bottom">
-        <div class="container d-flex flex-wrap justify-content-center">
-            
-            <form class=" row" role="search">
-              <div class="dropdown col-3">
-                <button class="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Filtres
-                </button>
-                <div class="dropdown-menu"> {# revoir cette partie lors du formulaire à entrer afin d'obtenir un résultat  peux-être du js pour dynamiser la recherche  #}
-                  {#<div> 
-                    <select class="form-select" aria-label="Default select example">
-                      <option value="">Communes</option>
-                     {% for commune in communes %}
-                      <option value="{{commune.commune}}">{{commune.commune}}</option>
-                      {% endfor %}
-                      
-                    </select>
-                  </div>
-                  <div> 
-                    <select class="form-select" aria-label="Default select example">
-                      <option value="">Localités</option>
-                     {% for localite in localites %}
-                      <option value="{{localite.localite}}">{{localite.localite}}</option>
-                      {% endfor %}                      
-                    </select>
-                  </div>
-                  <div> 
-                    <select class="form-select" aria-label="Default select example">
-                      <option value="">Code Postal</option>
-                     {% for code_postal in code_postaux %}
-                      <option value="{{code_postal.codePostal}}">{{code_postal.codePostal}}</option>
-                      {% endfor %}                      
-                    </select>
-                  </div>
-                  <div> 
-                    <select class="form-select" aria-label="Default select example">
-                      <option value="">catégories</option>
-                      {% for categorie in categories %}
-                      <option value="">{{categorie.nom}}</option>
-                      {% endfor %}
-                      
-                    </select>
-                  </div>
-                 {{ form_start(form) }}
-
-                {{ form_row(form.region) }}
-
-                
-
-                {{ form_row(form.submit) }}
-
-                {{ form_end(form) }}#}
-                </div>
-              </div>
-              <div class="col-6">
-                <input type="search" class="form-control" placeholder="Recherche un prestataire" aria-label="Search">
-              </div>  
-              <div class="col-3">
-                 <button type="submit" class="btn">Submit</button>
-              </div>   
-            </form>
+<span id="menuHamburger" class="hamburger-icon">
+  <span class="fa fa-bars"></span>                
+</span>
+<header id="mainMenu" class="bg-light py-3 mb-4 border-bottom containerSearch">
+  <div class="container d-flex flex-wrap justify-content-center">    
+    <div class="container ">
+          
+      {{ form_start(form,  {'attr': {'class': 'row formSearch'}}) }}
+        <div class=" formPrestaire formInput">
+          {{ form_row(form.prestataire) }}
         </div>
+        <div class=" formInput formRegion">
+          {{ form_row(form.region, {'attr': {'class': 'select_region'}}) }}
+        </div>
+        <div class=" formInput formVille">
+          {{ form_row(form.ville, {'attr': {'class': 'select_ville'}}) }}
+        </div>
+        <div class="formInput formCp">  
+          {{ form_row(form.codePostal, {'attr': {'class': 'select_codePostal'}}) }} 
+        </div>
+        <div class=" formInput formSubmit">
+          <button type="submit" class="btn">Recherche</button>     
+        </div>        
+      {{ form_end(form) }}      
+    </div>
+  </div>
 </header>
-
 <div class="ruban_container"> 
   <div class="ruban"> 
   </div>
 </div>
- 
-
- {{ form_start(form) }}
-
-    {{ form_widget(form) }}   
-
-    <button type="submit" class="btn">Recherche</button>     
-
-                
-{{ form_end(form) }}
-
-{#
-  
-    - faire la gestion d'image 
-    -dashboard  voir dans loulaview pour les images 
-    - integrer l'image dans la db dans la table creer le form et faire l(intégration d'image par l'admin )
-
-<div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-        <img src="../img/slider/slider-1.jpg" class="d-block w-100" alt="...">
-    </div>
-    <div class="carousel-item">
-        <img src="../img/slider/slider-{{i}}.jpg" class="d-block w-100" alt="...">
-      </div>
-    {% for i in 2..3 %}
-      <div class="carousel-item">
-        <img src="../img/slider/slider-{{i}}.jpg" class="d-block w-100" alt="...">
-      </div>
-    {% endfor %}
-  </div>
-  <div class="carousel-control-prev"  data-bs-target="#carouselExampleFade" data-bs-slide="prev">    
-  </div>
-  <div class="carousel-control-next"  data-bs-target="#carouselExampleFade" data-bs-slide="next">    
-  </div>
-   
-</div>#}
-{# left column list category  
- - à voir comme le mettre sur le coté voir boostrap ou css ou une balise 
- - controller categoryController 
- - avoir l'entity qui convient 
- faire la liaison 
-#}
 <div class='list-category'>
   <h2>Liste des catégories</h2>
   <ul class="button-list">
@@ -126,8 +46,6 @@
     {% endfor %}    
   </ul>  
 </div>
-
-
 {# top service du mois 
     choisir un sous categ au hasard par mois et le mettre en avant 
  #}
@@ -135,10 +53,9 @@
   <h2>Catégorie du mois</h2>
   <div class="card text-bg-dark">
     <img src="img/remise_en_forme.jpg" class="card-img" alt=""> {# attention il faut arranger le systeme pour que l'image corresponde peut-etre faire une relation #}
-    <div class="card-img-overlay contenu_categ_mois">
+    <div class="contenu_categ_mois">
       <h5 class="card-title">{{categ_mois.nom}}</h5>
       <p class="card-text">{{categ_mois.description}}</p>
-      
     </div>
   </div>
 </div>
@@ -152,24 +69,14 @@
  #}
 <div class="Prestataire récent">
   <h1>Prestataire récent</h1>
-  
   <ul class="button-list">
- {% for i in 1..4 %}
-
+    {% for i in 1..4 %}
     <li>
-        <a href="{{path('app_categorie_de_services', )}}">
-          prestataire {{i}}
-        </a>
-      </li>
-
-  {% endfor %}
+      <a href="{{path('app_categorie_de_services', )}}">
+        prestataire {{i}}
+      </a>
+    </li>
+    {% endfor %}
   </ul>
-  
 </div>
-
-
-
-
-
-
 {% endblock %}

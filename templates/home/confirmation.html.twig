@@ -8,12 +8,14 @@
 {% endblock %}
 {% block body %}
 
-<div class="container_confirmation">
-		<h1>Confirmation d'envoi d'e-mail</h1>
-		<p>un message a bien été envoyé à l'adresse suivante</p>
-		<P>{{utilisateur.email}}</p>
-		<p><a href="{{path('app_home')}}">Retour à la page d'accueil</a></p>
+<div class="container container_confirmation">
+	<h1>Confirmation d'envoi d'e-mail</h1>
+	<div class="container block_info">
+		<h5>un E-mail a bien été envoyé à l'adresse suivante</h5>
+		<h5>{{utilisateur.email}}</h5>
+		<h5><a href="{{path('app_home')}}">Retour à la page d'accueil</a></h5>
 	</div>
+</div>
 
 {% endblock %}
 
