@@ -223,6 +223,18 @@ class DeveloppeurController extends AbstractController
         ]);
     }
 
+    #[Route('/404', name: 'app_404')]
+    public function encours(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        
+        
+
+        return $this->render('developpeur/404.html.twig', [            
+            'controller_name'   =>  '404 en cour de fabrication'  
+            
+        ]);
+    }
+
 
 }
 

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-
+use App\Entity\CategorieDeServices;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -52,6 +52,7 @@ class InscriptionController extends AbstractController
             $inscriptionComplete = true;
             $image = $form->get('Image')->getData();
             $logo = $form->get('Logo')->getData();
+            $categorie = $form->get('categorie');
             
           
 
@@ -61,6 +62,9 @@ class InscriptionController extends AbstractController
             
             // si la réponse à la question êtes vous un prestataire ($role = true) est true 
             if($role){
+
+                $repository = $entityManager->getRepository(CategorieDeServices::class);
+                $categ = $repository->find($categorie); 
                             
                 $prestataire = new Prestataire;
                 $prestataire ->setNom($nom_societe);
@@ -68,6 +72,7 @@ class InscriptionController extends AbstractController
                 $prestataire ->setNumtva($tva);
                 $prestataire ->setSiteInternet($siteInternet);
                 $prestataire->setUtilisateur($utilisateur);
+                $prestataire->setCategorie($categ);
                 $entityManager->persist($prestataire);      
                 $entityManager->flush();
                 $repository = $entityManager->getRepository(Prestataire::class);

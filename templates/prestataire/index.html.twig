@@ -1,20 +1,84 @@
 {% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
 
-{% block title %}Hello PrestataireController!{% endblock %}
+{% block title %}Prestataire_details{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<main>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+  
+ <header  class="bg-light py-3 mb-4 border-bottom containerSearch">
+  <div class="container d-flex flex-wrap justify-content-center">  
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/xampp/htdocs/annuaire_bien_etre/src/Controller/PrestataireController.php'|file_link(0) }}">src/Controller/PrestataireController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/xampp/htdocs/annuaire_bien_etre/templates/prestataire/index.html.twig'|file_link(0) }}">templates/prestataire/index.html.twig</a></code></li>
-    </ul>
+    {% include 'block/search.twig' %}
+    
+  </div>
+</header>
+
+
+{% include 'block/ruban.twig' %} 
+<div class="container marketing">
+    <div class="row featurette">
+        <div class="col-md-6">
+
+            <h2 class="featurette-heading fw-normal lh-1">{{prestataire.Nom}}</h2>
+                <br>
+            <div class='lead'>
+                <label >numéro d'entreprise : </label>
+                <input type="text" readonly placeholder="{{prestataire.Numtva}}">
+                <br>
+            </div>
+            <div class='lead'>
+                <label >numéro de Téléphone : </label>
+                <input type="text" readonly placeholder="{{prestataire.Numtel}}">
+                <br>
+            </div>
+            <div class='lead'>
+                <label >adresse e-mail : </label>
+                <input type="text" readonly placeholder="{{prestataire.utilisateur.email}}">
+                <br>
+            </div>
+            <div class='lead'>
+                <label >Adresse  : </label>
+                <br>
+                <input type="text" readonly placeholder="{{prestataire.utilisateur.adresseRue}}, {{prestataire.utilisateur.adresseNumber}}">
+                <br>
+                <input type="text" readonly placeholder="{{prestataire.utilisateur.codePostal.codePostal}}">
+                <br>
+                <input type="text" readonly placeholder="{{prestataire.utilisateur.ville.villeName}}">
+                <br>
+                <input type="text" readonly placeholder="{{prestataire.utilisateur.region.regionName}}">
+                <br>
+            </div>
+            <div class='lead'>
+                <label >Catégorie  : </label>
+                <input type="text" readonly placeholder="{{prestataire.categorie.nom}}">
+            </div>
+        </div>
+        <div class="col-md-6">
+            {% for image in images %}
+
+            {% if image.prestataire != null %}
+
+            {% if image.prestataire.id == prestataire.id  %}
+            <img class="bd-placeholder-img rounded-circle" width="400" height="400" src="../img/logo/{{image.imageName}}" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em"></text></img>
+
+            {% endif %}   
+
+            {% endif %}
+            {% endfor %}
+        </div>
+
+    </div>
 </div>
+
+    
+    
+
+    
+
+
+  
+</main>
+
 {% endblock %}

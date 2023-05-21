@@ -34,14 +34,20 @@ class CategorieDeServices
     #[ORM\OneToMany(mappedBy: 'CategorieDeServices', targetEntity: Promotion::class)]
     private Collection $promotions;
 
-    #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Images::class)]
-    private Collection $image;
+    #[ORM\OneToOne(mappedBy: 'categorie', cascade: ['persist', 'remove'])]
+    private ?Images $images = null;
+
+    #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Prestataire::class)]
+    private Collection $prestataires;
+
+ 
 
     public function __construct()
     {
         $this->proposers = new ArrayCollection();
         $this->promotions = new ArrayCollection();
-        $this->image = new ArrayCollection();
+        $this->prestataires = new ArrayCollection();
+       
     }
 
     public function getId(): ?int
@@ -157,33 +163,57 @@ class CategorieDeServices
         return $this;
     }
 
-    /**
-     * @return Collection<int, Images>
-     */
-    public function getImage(): Collection
+    public function getImages(): ?Images
     {
-        return $this->image;
+        return $this->images;
     }
 
-    public function addImage(Images $image): self
+    public function setImages(?Images $images): self
     {
-        if (!$this->image->contains($image)) {
-            $this->image->add($image);
-            $image->setCategorie($this);
+        // unset the owning side of the relation if necessary
+        if ($images === null && $this->images !== null) {
+            $this->images->setCategorie(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($images !== null && $images->getCategorie() !== $this) {
+            $images->setCategorie($this);
+        }
+
+        $this->images = $images;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Prestataire>
+     */
+    public function getPrestataires(): Collection
+    {
+        return $this->prestataires;
+    }
+
+    public function addPrestataire(Prestataire $prestataire): self
+    {
+        if (!$this->prestataires->contains($prestataire)) {
+            $this->prestataires->add($prestataire);
+            $prestataire->setCategorie($this);
         }
 
         return $this;
     }
 
-    public function removeImage(Images $image): self
+    public function removePrestataire(Prestataire $prestataire): self
     {
-        if ($this->image->removeElement($image)) {
+        if ($this->prestataires->removeElement($prestataire)) {
             // set the owning side to null (unless already changed)
-            if ($image->getCategorie() === $this) {
-                $image->setCategorie(null);
+            if ($prestataire->getCategorie() === $this) {
+                $prestataire->setCategorie(null);
             }
         }
 
         return $this;
     }
+
+   
 }

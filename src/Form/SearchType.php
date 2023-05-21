@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\CodePostal;
-use App\Entity\Prestataire;
+use App\Entity\CategorieDeServices;
 use App\Entity\Region;
 use App\Entity\Ville;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -19,8 +19,7 @@ class SearchType extends AbstractType
     {
         $builder
 
-            -> add('prestataire', TextType::class, [
-                
+            -> add('prestataire', TextType::class, [                
                'label' => 'Prestataire : ',
                'required' =>false,
                 
@@ -51,6 +50,14 @@ class SearchType extends AbstractType
                 'required' =>false,
                 'choice_label' => 'codePostal', // la propriété de l'entité à afficher dans le champ
                 'choice_value' => 'codePostal',
+            ])
+
+            ->add('categorie', EntityType::class, [
+                'class' => CategorieDeServices::class,
+                'required' =>false,
+                'placeholder'  => 'Sélectionnez une catégorie',
+                'choice_label' => 'nom', // la propriété de l'entité à afficher dans le champ
+                'choice_value' => 'id',                    
             ])
 
             

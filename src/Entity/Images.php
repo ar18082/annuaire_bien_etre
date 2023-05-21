@@ -5,8 +5,6 @@ namespace App\Entity;
 use App\Repository\ImagesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-
-
 #[ORM\Entity(repositoryClass: ImagesRepository::class)]
 class Images
 {
@@ -18,16 +16,14 @@ class Images
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageName = null;
 
-    #[ORM\ManyToOne(inversedBy: 'image')]
+    #[ORM\ManyToOne(inversedBy: 'images')]
     private ?Internaute $internaute = null;
 
-    #[ORM\ManyToOne(inversedBy: 'image')]
+    #[ORM\ManyToOne(inversedBy: 'images')]
     private ?Prestataire $prestataire = null;
 
-    #[ORM\ManyToOne(inversedBy: 'image')]
+    #[ORM\OneToOne(inversedBy: 'images', cascade: ['persist', 'remove'])]
     private ?CategorieDeServices $categorie = null;
-
-   
 
     public function getId(): ?int
     {

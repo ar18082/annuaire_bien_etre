@@ -104,6 +104,56 @@ class PrestataireRepository extends ServiceEntityRepository
         return $this->paginatorInterface->paginate($qb, $page, 3);     
     }
 
+    public function findByCateg($categ, $page = 1): PaginationInterface
+    {
+        
+        $qb = $this->createQueryBuilder('p')
+        ->join('p.utilisateurs', 'u')
+        ->join('u.region', 'r') 
+        ->join('p.categorie', 'c')       
+        ->where('c.id = :val')
+        ->setParameter('val', $categ)
+        ;
+
+        
+
+        return $this->paginatorInterface->paginate($qb, $page, 3);     
+    }
+
+    public function findPrestataireRecent(): array
+    {
+        
+        return $this->createQueryBuilder('p')
+            ->join('p.utilisateurs', 'u')
+            -> orderBy('u.inscription', 'DESC')   
+            ->setMaxResults(4)    
+            ->getQuery()
+            ->getResult();
+        ;
+
+        
+
+         
+    }
+
+
+    public function findPrestataireAll($page = 1): PaginationInterface
+    {
+        
+        $qb = $this->createQueryBuilder('p')
+        ->join('p.utilisateurs', 'u')
+        -> orderBy('p.Nom', 'ASC')   
+                
+                    
+        
+        ;
+
+        
+
+        return $this->paginatorInterface->paginate($qb, $page, 3);     
+    }
+
+    
 
 //    /**
 //     * @return Prestataire[] Returns an array of Prestataire objects

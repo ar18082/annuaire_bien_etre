@@ -51,7 +51,12 @@ class Prestataire
     private Collection $utilisateurs;
 
     #[ORM\OneToMany(mappedBy: 'prestataire', targetEntity: Images::class)]
-    private Collection $image;
+    private Collection $images;
+
+    #[ORM\ManyToOne(inversedBy: 'prestataires')]
+    private ?CategorieDeServices $categorie = null;
+
+   
 
     public function __construct()
     {
@@ -62,7 +67,8 @@ class Prestataire
         $this->promotions = new ArrayCollection();
         $this->stages = new ArrayCollection();
         $this->utilisateurs = new ArrayCollection();
-        $this->image = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -315,15 +321,15 @@ class Prestataire
     /**
      * @return Collection<int, Images>
      */
-    public function getImage(): Collection
+    public function getImages(): Collection
     {
-        return $this->image;
+        return $this->images;
     }
 
     public function addImage(Images $image): self
     {
-        if (!$this->image->contains($image)) {
-            $this->image->add($image);
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
             $image->setPrestataire($this);
         }
 
@@ -332,7 +338,7 @@ class Prestataire
 
     public function removeImage(Images $image): self
     {
-        if ($this->image->removeElement($image)) {
+        if ($this->images->removeElement($image)) {
             // set the owning side to null (unless already changed)
             if ($image->getPrestataire() === $this) {
                 $image->setPrestataire(null);
@@ -341,4 +347,18 @@ class Prestataire
 
         return $this;
     }
+
+    public function getCategorie(): ?CategorieDeServices
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?CategorieDeServices $categorie): self
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+   
 }
