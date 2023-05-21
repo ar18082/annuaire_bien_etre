@@ -1,11 +1,3 @@
-dans le readme il faut expliquer comment faire le déployement de l'application sur le site 
-
-faire un document Dev : guide pour expliquer l'architecture du site et oû est quoi . 
-
-faire un document Utilisateur : manuel d'utilisation pour le client. 
-
-
-
 installation : 
 
 1. Cloner le dépôt GitHub : Ouvrez un terminal ou une ligne de commande sur votre machine et utilisez la commande suivante pour cloner votre dépôt GitHub :
@@ -55,7 +47,7 @@ composer install
     4.4. Importez les datas :
         4.4.1. Dans la page de la base de données, recherchez l'onglet "Import" (ou "Importer" selon la langue de votre interface) dans la barre de navigation supérieure.
 
-        4.4.2. Dans la section "Fichier à importer", cliquez sur le bouton "Parcourir" (ou "Choisir un fichier") et sélectionnez le fichier SQL contenant les données que  vous souhaitez importer dans votre base de données.
+        4.4.2. Dans la section "Fichier à importer", cliquez sur le bouton "Parcourir" (ou "Choisir un fichier") et sélectionnez le fichier annuaire_bien_etre.sql contenant les données que  vous souhaitez importer dans votre base de données.
 
         4.4.3 Vérifiez que les autres paramètres d'importation sont corrects. Par défaut, phpMyAdmin détecte automatiquement les paramètres appropriés en fonction du fichier SQL. Vous pouvez également modifier les options d'importation selon vos besoins.
 
