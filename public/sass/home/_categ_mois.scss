@@ -28,7 +28,17 @@
     
 }
 
-@media screen and ( min-width:map-get($version,pc)){
+@media screen and ( min-width:map-get($version,tablet)){
+    .categorie_mois{
+        
+    
+        & .card{
+            width: 60%;
+        }
+    }
+}
+
+@media screen and ( max-width:map-get($version,pc)){
     .categorie_mois{
         
     

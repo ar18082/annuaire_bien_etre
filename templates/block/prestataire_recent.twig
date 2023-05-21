@@ -1,0 +1,35 @@
+<div class="Prestataire récent">
+  <h1>Prestataire récent</h1>
+  
+  
+<ul class="button-list">
+  
+    {% for prestataire in prestataires %}
+    <li>
+      
+    <div class="card" style="width: 18rem;">
+    {% for image in images %}
+      
+      {% if image.prestataire != null %}
+      
+        {% if image.prestataire.id == prestataire.id  %}
+        
+        <img src="img/logo/{{image.imageName}}" class="card-img-top" alt="{{image.imageName}}">
+        {% else %}
+        <img src="..." class="card-img-top" alt="pas de logo">
+      
+        {% endif %}   
+         
+      {% endif %}
+    {% endfor %}
+    <div class="card-body">
+      <h5 class="card-title">{{prestataire.nom}}</h5>
+      <p class="card-text">{{prestataire.utilisateur.ville.villeName}}</p>
+      <a href="{{path('app_prestataire_details', {id: prestataire.id})}}" class="btn">Détails</a>
+    </div>
+  </div>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

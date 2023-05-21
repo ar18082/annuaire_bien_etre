@@ -40,7 +40,9 @@ class Internaute
     private Collection $utilisateurs;
 
     #[ORM\OneToMany(mappedBy: 'internaute', targetEntity: Images::class)]
-    private Collection $image;
+    private Collection $images;
+
+    
 
     
 
@@ -50,7 +52,8 @@ class Internaute
         $this->abuses = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->utilisateurs = new ArrayCollection();
-        $this->image = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -239,15 +242,15 @@ class Internaute
     /**
      * @return Collection<int, Images>
      */
-    public function getImage(): Collection
+    public function getImages(): Collection
     {
-        return $this->image;
+        return $this->images;
     }
 
     public function addImage(Images $image): self
     {
-        if (!$this->image->contains($image)) {
-            $this->image->add($image);
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
             $image->setInternaute($this);
         }
 
@@ -256,7 +259,7 @@ class Internaute
 
     public function removeImage(Images $image): self
     {
-        if ($this->image->removeElement($image)) {
+        if ($this->images->removeElement($image)) {
             // set the owning side to null (unless already changed)
             if ($image->getInternaute() === $this) {
                 $image->setInternaute(null);
@@ -265,6 +268,8 @@ class Internaute
 
         return $this;
     }
+
+    
 
     
 }

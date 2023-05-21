@@ -1,0 +1,12 @@
+<div class='list-category'>
+  <h2>Liste des catégories</h2>
+  <ul class="button-list">
+    {% for categorie in categories %}
+      <li>
+        <a href="{{path('app_categorie_de_services', {id: categorie.id })}}">
+          {{categorie.nom}} 
+        </a>
+      </li>
+    {% endfor %}    
+  </ul>  
+</div>

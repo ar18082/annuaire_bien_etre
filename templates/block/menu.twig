@@ -1,7 +1,7 @@
 <div class="border-bottom ">
-    <div class="container navigation">
+    <div class="container h-header">
         <div class= "logo-container ">
-        <img src="{{asset('img/logo.jpg')}}" class="logo" alt="">
+            <img src="{{asset('img/logo.jpg')}}" class="logo" alt="">
         </div>
         <div class="container_menu">       
             <span id="menuHamburger" class="h-hamburger-icon">
@@ -10,12 +10,12 @@
             <div id="mainMenu" class="navigation">
                 <nav class='h-nav'>
                     <ul class="h-nav-ul">
-                        <li><a href="{{path('app_home')}}">Home</a></li>
-                        <li><a href="">A propos</a></li>
-                        <li><a href="">Partenaire</a></li>
-                        <li><a href="">Par région</a></li>
-                        <li><a href="">Stages</a></li>
-                        <li><a href="">Contact</a></li>
+                        <li class='btn'><a href="{{path('app_home')}}">Home</a></li>
+                        <li class='btn'><a href="{{path('app_404')}}">A propos</a></li>
+                        <li class='btn'><a href="{{path('app_prestataire')}}">Partenaire</a></li>
+                        <li class='btn'><a href="{{path('app_home')}}">Par région</a></li>
+                        <li class='btn'><a href="{{path('app_404')}}">Stages</a></li>
+                        <li class='btn'><a href="{{path('app_404')}}">Contact</a></li>
                     </ul>
                 </nav>
             </div>
@@ -27,8 +27,14 @@
                     <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
                 </svg>
             </button>
-            <ul class="dropdown-menu">                    
-                <li><a class="dropdown-item" href="{{path('app_login')}}">Connexion</a></li>
+            <ul class="dropdown-menu"> 
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <li><a class="dropdown-item" href="{{path('app_logout')}}">déconnexion</a></li>
+            {% endif %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}
+            <li><a class="dropdown-item" href="{{path('app_login')}}">Connexion</a></li>
+            {% endif %}                   
+                
                 <li><a class="dropdown-item" href="{{path('register')}}">Créer un compte</a></li>
             </ul>
         </div>          

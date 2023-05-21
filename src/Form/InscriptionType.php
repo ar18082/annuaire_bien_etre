@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\CategorieDeServices;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -102,6 +103,15 @@ class InscriptionType extends AbstractType
                 'mapped' => false,
                 'required' => false
             ])
+
+            ->add('categorie', EntityType::class, [
+                'class' => CategorieDeServices::class,
+                'required' =>false,
+                'placeholder'  => 'Sélectionnez une catégorie',
+                'choice_label' => 'nom', // la propriété de l'entité à afficher dans le champ
+                'choice_value' => 'id',                    
+            ])
+
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer'
             ])

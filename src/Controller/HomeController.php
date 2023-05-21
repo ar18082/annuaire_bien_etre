@@ -9,11 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Security;
 
 
 
 //entity 
 use App\Entity\CategorieDeServices;
+use App\Entity\Images;
+use App\Entity\Internaute;
 use App\Entity\Utilisateur;
 use App\Entity\Prestataire;
 use App\Form\SearchType;
@@ -24,6 +27,12 @@ use App\Form\SearchType;
 
 class HomeController extends AbstractController
 {
+    private $security;
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('/', name: 'app_home', methods: 'GET')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -31,7 +40,22 @@ class HomeController extends AbstractController
         $categories = $repository->findAll();
         $randomIndex = array_rand($categories);
         $randomCateg = $categories[$randomIndex];
+        $repository = $entityManager->getRepository(Prestataire::class);
+        $prestataires = $repository->findPrestataireRecent();
+        
+        $repository = $entityManager->getRepository(Internaute::class);
+        $internaute = $repository->find(['id'=> 1]);
 
+        $repository = $entityManager->getRepository(Images::class);
+        $images = $repository->findAll();
+
+        
+
+
+
+        $user = $this->security->getUser();
+        
+        
 
         
         $form = $this->createForm(SearchType::class);
@@ -41,6 +65,7 @@ class HomeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $datas = $form->getData();
            
+            
           
                 if(!empty($datas['prestataire'])){
                     $recherche_presta= $datas['prestataire'];
@@ -73,11 +98,21 @@ class HomeController extends AbstractController
                     $repository = $entityManager->getRepository(Prestataire::class);
                     $page = $request->query->get('page', 1);
                     $prestataires = $repository->findByRegion($recherche_region, $page);
+                }else if($datas['categorie'] != null){
+                    $recherche_categ = $datas['categorie']->getid();
+
+                    
+                    $repository = $entityManager->getRepository(Prestataire::class);
+                    $page = $request->query->get('page', 1);
+                    $prestataires = $repository->findByCateg($recherche_categ, $page);
+
+                    
                 }
            
             return $this->render('prestataire/liste_prestataire.html.twig', [
                 'controller_name' => 'PrestataireController',
-                'prestataires' =>$prestataires
+                'prestataires' =>$prestataires,
+                'images' =>$images
                 
             ]);
 
@@ -89,6 +124,10 @@ class HomeController extends AbstractController
             'form' =>$form ->createView(),
             'categories' => $categories,
             'categ_mois' => $randomCateg,
+            'prestataires' => $prestataires,
+            'internaute' => $internaute,
+            'images' =>$images,
+            
             
             
             
@@ -107,6 +146,7 @@ class HomeController extends AbstractController
         return $this->render('home/confirmation.html.twig', [
             'controller_name'=> 'confirmation',
             'utilisateur' => $utilisateur,
+            
             
             
         ]);
