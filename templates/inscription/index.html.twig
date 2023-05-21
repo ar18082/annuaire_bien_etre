@@ -7,12 +7,18 @@
 
 {% block body %}
 
+
+
+
+
+
 <div class="container">
 <h1>Formulaire d'inscription</h1>
 
 {{ form_start(form) }}
 {{ form_row(form.Nom) }}
 {{ form_row(form.Prenom) }}
+{{ form_row(form.Image) }}
 {{ form_row(form.AdresseRue) }}
 {{ form_row(form.AdresseNumber) }}
 {{ form_row(form.region, {'attr': {'class': 'search_region'}}) }}
@@ -21,6 +27,7 @@
 {{ form_row(form.Prestataire) }}
 <div id='p'>
 {{form_row(form.Nom_societe)}}
+{{form_row(form.Logo)}}
 {{ form_row(form.Numtel) }}
 {{ form_row(form.Numtva) }}
 {{ form_row(form.SiteInternet) }}

@@ -16,51 +16,15 @@
     </head>
     <body>
 {% block header %}
-    <nav class="border-bottom ">
-        <div class="container navigation">
-          <div class= "logo-container ">
-            <img src="{{asset('img/logo.jpg')}}" class="logo" alt="">
-          </div>
-          <div class="dropdown icon_login">
-              <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                      <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                  </svg>
-              </button>
-              <ul class="dropdown-menu">                    
-                  <li><a class="dropdown-item" href="{{path('app_login')}}">Connexion</a></li>
-                  <li><a class="dropdown-item" href="{{path('register')}}">Créer un compte</a></li>
-              </ul>
-          </div>          
-        </div>
-    </nav>
+  {% include 'block/menu.twig' %}
     
 {% endblock %}
 {% block body %}
 {% endblock %}
 {% block footer %}
-<div class="container">
-  <footer class="py-5">
-    <div class="row">     
 
-      <div class="col-md-12 offset-md-1 mb-3">
-        <form>
-          <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-            <label for="newsletter1" class="visually-hidden">Souscrire à notre newsletter</label>
-            <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
-            <button class="btn mt-1" type="button">Subscribe</button>
-          </div>
-        </form>
-      </div>
-    </div>
+ {% include 'block/footer.twig' %}
 
-    <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
-      <p>&copy; 2022 Company, Inc. All rights reserved.</p>
-      
-    </div>
-  </footer>
-</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -71,7 +35,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
   <script src="{{asset('js/main.js')}}"></script>
-  <script src="{{asset('js/search.js')}}"></script>     
+ {# <script src="{{asset('js/search.js')}}"></script>#}     
     
 {% endblock %}
     </body>

@@ -39,6 +39,9 @@ class Internaute
     #[ORM\OneToMany(mappedBy: 'internaute', targetEntity: Utilisateur::class)]
     private Collection $utilisateurs;
 
+    #[ORM\OneToMany(mappedBy: 'internaute', targetEntity: Images::class)]
+    private Collection $image;
+
     
 
     public function __construct()
@@ -47,6 +50,7 @@ class Internaute
         $this->abuses = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->utilisateurs = new ArrayCollection();
+        $this->image = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -226,6 +230,36 @@ class Internaute
             // set the owning side to null (unless already changed)
             if ($utilisateur->getInternaute() === $this) {
                 $utilisateur->setInternaute(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Images>
+     */
+    public function getImage(): Collection
+    {
+        return $this->image;
+    }
+
+    public function addImage(Images $image): self
+    {
+        if (!$this->image->contains($image)) {
+            $this->image->add($image);
+            $image->setInternaute($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): self
+    {
+        if ($this->image->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getInternaute() === $this) {
+                $image->setInternaute(null);
             }
         }
 

@@ -7,27 +7,10 @@
   <span class="fa fa-bars"></span>                
 </span>
 <header id="mainMenu" class="bg-light py-3 mb-4 border-bottom containerSearch">
-  <div class="container d-flex flex-wrap justify-content-center">    
-    <div class="container ">
-          
-      {{ form_start(form,  {'attr': {'class': 'row formSearch'}}) }}
-        <div class=" formPrestaire formInput">
-          {{ form_row(form.prestataire) }}
-        </div>
-        <div class=" formInput formRegion">
-          {{ form_row(form.region, {'attr': {'class': 'select_region'}}) }}
-        </div>
-        <div class=" formInput formVille">
-          {{ form_row(form.ville, {'attr': {'class': 'select_ville'}}) }}
-        </div>
-        <div class="formInput formCp">  
-          {{ form_row(form.codePostal, {'attr': {'class': 'select_codePostal'}}) }} 
-        </div>
-        <div class=" formInput formSubmit">
-          <button type="submit" class="btn">Recherche</button>     
-        </div>        
-      {{ form_end(form) }}      
-    </div>
+  <div class="container d-flex flex-wrap justify-content-center">  
+
+    {% include 'block/search.twig' %}
+    
   </div>
 </header>
 <div class="ruban_container"> 

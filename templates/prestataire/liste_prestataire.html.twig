@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}{{controller_name}}{% endblock %}
+
+{% block body %}
+
+
+{% block content %}
+
+{% endblock content %}
+
+
+
+  {% for prestataire in prestataires %}
+  <div class="card" style="width: 18rem;">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">{{prestataire.nom}}</h5>
+      <p class="card-text">{{prestataire.utilisateur.ville.villeName}}</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
+  
+  {% endfor %}       
+  {{ knp_pagination_render(prestataires) }}  
+
+ {#<span id="menuHamburger" class="hamburger-icon">
+  <span class="fa fa-bars"></span>                
+</span>
+<header id="mainMenu" class="bg-light py-3 mb-4 border-bottom containerSearch">
+  <div class="container d-flex flex-wrap justify-content-center">    
+    <div class="container ">
+          
+      {{ form_start(form,  {'attr': {'class': 'row formSearch'}}) }}
+        <div class=" formPrestaire formInput">
+          {{ form_row(form.prestataire) }}
+        </div>
+        <div class=" formInput formRegion">
+          {{ form_row(form.region, {'attr': {'class': 'select_region'}}) }}
+        </div>
+        <div class=" formInput formVille">
+          {{ form_row(form.ville, {'attr': {'class': 'select_ville'}}) }}
+        </div>
+        <div class="formInput formCp">  
+          {{ form_row(form.codePostal, {'attr': {'class': 'select_codePostal'}}) }} 
+        </div>
+        <div class=" formInput formSubmit">
+          <button type="submit" class="btn">Recherche</button>     
+        </div>        
+      {{ form_end(form) }}      
+    </div>
+  </div>
+</header>
+<div class="ruban_container"> 
+  <div class="ruban"> 
+  </div>
+</div>
+<div class='list-category'>
+  <h2>Liste des catégories</h2>
+  <ul class="button-list">
+    {% for categorie in categories %}
+      <li>
+        <a href="{{path('app_categorie_de_services', {id: categorie.id })}}">
+          {{categorie.nom}} 
+        </a>
+      </li>
+    {% endfor %}    
+  </ul>  
+</div>
+ top service du mois 
+    choisir un sous categ au hasard par mois et le mettre en avant 
+
+<div class = "categorie_mois">
+  <h2>Catégorie du mois</h2>
+  <div class="card text-bg-dark">
+    <img src="img/remise_en_forme.jpg" class="card-img" alt=""> {# attention il faut arranger le systeme pour que l'image corresponde peut-etre faire une relation 
+    <div class="contenu_categ_mois">
+      <h5 class="card-title">{{categ_mois.nom}}</h5>
+      <p class="card-text">{{categ_mois.description}}</p>
+    </div>
+  </div>
+</div>
+
+
+ Prestataire récent 
+    afficher le dernier prestataire inscrit 
+    voir avec la dateTime et faire une requete qui dit de récupérer le plus récent 
+    à réflechir 
+    afficher 
+ #}
+
+{% endblock %}

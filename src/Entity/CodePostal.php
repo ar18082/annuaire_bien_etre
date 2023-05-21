@@ -21,9 +21,13 @@ class CodePostal
     #[ORM\OneToMany(mappedBy: 'codePostal', targetEntity: Ville::class)]
     private Collection $villes;
 
+    #[ORM\OneToMany(mappedBy: 'codePostal', targetEntity: Utilisateur::class)]
+    private Collection $utilisateurs;
+
     public function __construct()
     {
         $this->villes = new ArrayCollection();
+        $this->utilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,5 +80,35 @@ class CodePostal
     public Function __toString(){
         
         return $this->CodePostal;
+    }
+
+    /**
+     * @return Collection<int, Utilisateur>
+     */
+    public function getUtilisateurs(): Collection
+    {
+        return $this->utilisateurs;
+    }
+
+    public function addUtilisateur(Utilisateur $utilisateur): self
+    {
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs->add($utilisateur);
+            $utilisateur->setCodePostal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUtilisateur(Utilisateur $utilisateur): self
+    {
+        if ($this->utilisateurs->removeElement($utilisateur)) {
+            // set the owning side to null (unless already changed)
+            if ($utilisateur->getCodePostal() === $this) {
+                $utilisateur->setCodePostal(null);
+            }
+        }
+
+        return $this;
     }
 }

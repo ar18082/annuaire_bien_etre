@@ -21,9 +21,13 @@ class Region
     #[ORM\OneToMany(mappedBy: 'region', targetEntity: Ville::class, orphanRemoval: true)]
     private Collection $villes;
 
+    #[ORM\OneToMany(mappedBy: 'region', targetEntity: Utilisateur::class)]
+    private Collection $utilisateurs;
+
     public function __construct()
     {
         $this->villes = new ArrayCollection();
+        $this->utilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,5 +80,35 @@ class Region
     public Function __toString(){
         
         return $this->regionName;
+    }
+
+    /**
+     * @return Collection<int, Utilisateur>
+     */
+    public function getUtilisateurs(): Collection
+    {
+        return $this->utilisateurs;
+    }
+
+    public function addUtilisateur(Utilisateur $utilisateur): self
+    {
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs->add($utilisateur);
+            $utilisateur->setRegion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUtilisateur(Utilisateur $utilisateur): self
+    {
+        if ($this->utilisateurs->removeElement($utilisateur)) {
+            // set the owning side to null (unless already changed)
+            if ($utilisateur->getRegion() === $this) {
+                $utilisateur->setRegion(null);
+            }
+        }
+
+        return $this;
     }
 }

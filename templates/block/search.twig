@@ -1,0 +1,20 @@
+<div class="container ">
+          
+      {{ form_start(form,  {'attr': {'class': 'row formSearch'}}) }}
+        <div class=" formPrestaire formInput">
+          {{ form_row(form.prestataire) }}
+        </div>
+        <div class=" formInput formRegion">
+          {{ form_row(form.region, {'attr': {'class': 'select_region'}}) }}
+        </div>
+        <div class=" formInput formVille">
+          {{ form_row(form.ville, {'attr': {'class': 'select_ville'}}) }}
+        </div>
+        <div class="formInput formCp">  
+          {{ form_row(form.codePostal, {'attr': {'class': 'select_codePostal'}}) }} 
+        </div>
+        <div class=" formInput formSubmit">
+          <button type="submit" class="btn">Recherche</button>     
+        </div>        
+      {{ form_end(form) }}      
+</div>

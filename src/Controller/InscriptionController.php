@@ -13,15 +13,12 @@ use Doctrine\ORM\EntityManagerInterface;
 /*les entity*/
 use App\Entity\Internaute;
 use App\Entity\Prestataire;
-use App\Entity\Commune;
-use App\Entity\Localite;
-use App\Entity\CodePostal;
 use App\Entity\Utilisateur;
+use App\Entity\Images;
 /*les Forms */
-use App\Form\InternauteType;
+
 use App\Form\InscriptionType;
-use App\Form\PrestataireType;
-use App\Form\UtilisateurType;
+
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -30,10 +27,10 @@ class InscriptionController extends AbstractController
     #[Route('/inscription/{id}', name: 'app_inscription')]
     public function index($id, Request $request, EntityManagerInterface $entityManager): Response
     {
-       // recupérer l'id qui doit passer dans le mail 
-
         $form = $this->createForm(InscriptionType::class);
         $form->handleRequest($request);
+
+               
 
         if($form -> isSubmitted() && $form-> isValid()){
             // get data et traitement des date vers les différents entity 
@@ -53,67 +50,86 @@ class InscriptionController extends AbstractController
             $tva = $data['Numtva'];
             $siteInternet = $data['SiteInternet'];
             $inscriptionComplete = true;
+            $image = $form->get('Image')->getData();
+            $logo = $form->get('Logo')->getData();
             
           
 
             $repository = $entityManager->getRepository(Utilisateur::class);
             $utilisateur = $repository->find($id);  
-            
-            if($role){
-                if(!Empty($nom_societe)){
-                
-                    $prestataire = new Prestataire;
-                    $prestataire ->setNom($nom_societe);
-                    $prestataire ->setNumtel($telephone);
-                    $prestataire ->setNumtva($tva);
-                    $prestataire ->setSiteInternet($siteInternet);                
-                    $entityManager->persist($prestataire);
-                    $entityManager->flush();
-                    $repository = $entityManager->getRepository(Prestataire::class);
-                    $presta = $repository->findOneBy(['Nom' => $nom_societe]);
-                };
 
-                $r[] = 'ROLE_PRESTATAIRE';  
+            
+            // si la réponse à la question êtes vous un prestataire ($role = true) est true 
+            if($role){
+                            
+                $prestataire = new Prestataire;
+                $prestataire ->setNom($nom_societe);
+                $prestataire ->setNumtel($telephone);
+                $prestataire ->setNumtva($tva);
+                $prestataire ->setSiteInternet($siteInternet);
+                $prestataire->setUtilisateur($utilisateur);
+                $entityManager->persist($prestataire);      
+                $entityManager->flush();
+                $repository = $entityManager->getRepository(Prestataire::class);
+                $presta = $repository->findOneBy(['Nom' => $nom_societe]);
+                // attribution du prestataire 
+                $utilisateur ->setPrestataire($presta);
+                // défini role de l'utilisateur 
+                $r[] = 'ROLE_PRESTATAIRE'; 
+
+                
+                $fichier =  'logo_prestataire_'.$presta->getId().'.'. $logo->guessExtension();
+
+                $logo->move(
+                    'img/logo',
+                    $fichier
+                );
+                $img = new Images();
+                $img-> setImageName($fichier);
+                $img->setPrestataire($presta);
+                $entityManager->persist($img);
+                $entityManager->flush();
                 
             }else{
+                // la réponse à la question êtes vous un prestataire ($role = false) est false 
                 $internaute = new Internaute;
                 $internaute ->setNom($nom);
-                $internaute->setPrenom($prenom);
+                $internaute->setPrenom($prenom);                
                 $entityManager->persist($internaute);
                 $entityManager->flush();
+                // définir role de l'utilisateur 
                 $r[] = 'ROLE_INTERNAUTE';
                 $repository = $entityManager->getRepository(Internaute::class);
                 $inter = $repository->findOneBy(['Nom' => $nom, 'Prenom' => $prenom]); 
+                $utilisateur ->setInternaute($inter);
+
+                $fichier =  'internaute'.$inter->getId().'.'. $image->guessExtension();
+
+                $image->move(
+                    'img/internautes',
+                    $fichier
+                );
+                $img = new Images();
+                $img-> setImageName($fichier);
+                $img->setInternaute($inter);
+                $entityManager->persist($img);
+                $entityManager->flush();
             }
-
-              
-            
-
-            $utilisateur ->setAdresseRue($adresseRue);
-            $utilisateur ->setAdresseNumber($adresseNumber);
-            $utilisateur ->setInscriptConfirm($inscriptionComplete);
-            $utilisateur ->setInternaute($inter);
-
-            if(!Empty($presta)){
-                $utilisateur ->setPrestataire($presta);
-            }
-            
+            // attribution du role de l'utilisateur 
             $utilisateur->setRoles($r);
 
+            //attribution de la localisation 
+            $utilisateur ->setAdresseRue($adresseRue);
+            $utilisateur ->setAdresseNumber($adresseNumber);
+            $utilisateur ->setVille($ville);
+            $utilisateur ->setRegion($region);
+            $utilisateur ->setCodePostal($cp);
+
+
+            // confimation de l'inscription complete 
+            $utilisateur ->setInscriptConfirm($inscriptionComplete);
+            
             $entityManager->flush();
-           
-            // il va falloir faire les relations entre ville,region et cp avec utilisateur 
-            // envisager de l'envoyer en db persist et flush 
-
-            
-            
-
-          
-
-        
-
-
-            
             return $this->redirectToRoute('app_login');
             
 

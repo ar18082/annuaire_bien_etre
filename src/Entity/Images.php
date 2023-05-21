@@ -3,8 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\ImagesRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
+
 
 #[ORM\Entity(repositoryClass: ImagesRepository::class)]
 class Images
@@ -14,82 +15,69 @@ class Images
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $Ordre = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageName = null;
 
-    #[ORM\Column(type: Types::BLOB, nullable: true)]
-    private $Image = null;
+    #[ORM\ManyToOne(inversedBy: 'image')]
+    private ?Internaute $internaute = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?CategorieDeServices $CategorieDeServices = null;
+    #[ORM\ManyToOne(inversedBy: 'image')]
+    private ?Prestataire $prestataire = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Internaute $Internaute = null;
+    #[ORM\ManyToOne(inversedBy: 'image')]
+    private ?CategorieDeServices $categorie = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Prestataire $Prestataire = null;
+   
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getOrdre(): ?int
+    public function getImageName(): ?string
     {
-        return $this->Ordre;
+        return $this->imageName;
     }
 
-    public function setOrdre(?int $Ordre): self
+    public function setImageName(?string $imageName): self
     {
-        $this->Ordre = $Ordre;
-
-        return $this;
-    }
-
-    public function getImage()
-    {
-        return $this->Image;
-    }
-
-    public function setImage($Image): self
-    {
-        $this->Image = $Image;
-
-        return $this;
-    }
-
-    public function getCategorieDeServices(): ?CategorieDeServices
-    {
-        return $this->CategorieDeServices;
-    }
-
-    public function setCategorieDeServices(?CategorieDeServices $CategorieDeServices): self
-    {
-        $this->CategorieDeServices = $CategorieDeServices;
+        $this->imageName = $imageName;
 
         return $this;
     }
 
     public function getInternaute(): ?Internaute
     {
-        return $this->Internaute;
+        return $this->internaute;
     }
 
-    public function setInternaute(?Internaute $Internaute): self
+    public function setInternaute(?Internaute $internaute): self
     {
-        $this->Internaute = $Internaute;
+        $this->internaute = $internaute;
 
         return $this;
     }
 
     public function getPrestataire(): ?Prestataire
     {
-        return $this->Prestataire;
+        return $this->prestataire;
     }
 
-    public function setPrestataire(?Prestataire $Prestataire): self
+    public function setPrestataire(?Prestataire $prestataire): self
     {
-        $this->Prestataire = $Prestataire;
+        $this->prestataire = $prestataire;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?CategorieDeServices
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?CategorieDeServices $categorie): self
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }
