@@ -22,12 +22,14 @@ class SearchType extends AbstractType
             -> add('prestataire', TextType::class, [
                 
                'label' => 'Prestataire : ',
+               'required' =>false,
                 
             ])
 
             ->add('region', EntityType::class, [
             'class' => Region::class,
             'label' => 'Région :  ',
+            'required' =>false,
             'placeholder'  => 'Sélectionnez une région',
             'choice_label' => 'regionName', // la propriété de l'entité à afficher dans le champ
             'choice_value' => 'regionName',    
@@ -37,6 +39,7 @@ class SearchType extends AbstractType
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
                 'label' => 'ville :  ',
+                'required' =>false,
                 'placeholder'  => 'Sélectionnez une ville',
                 'choice_label' => 'VilleName', // la propriété de l'entité à afficher dans le champ
                 'choice_value' => 'VilleName', 
@@ -45,6 +48,7 @@ class SearchType extends AbstractType
             ->add('codePostal', EntityType::class, [
                 'class' => CodePostal::class,
                 'label' => 'Code Postal :  ',
+                'required' =>false,
                 'choice_label' => 'codePostal', // la propriété de l'entité à afficher dans le champ
                 'choice_value' => 'codePostal',
             ])
@@ -57,6 +61,7 @@ class SearchType extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
+            'method' =>'GET',
         ]);
     }
 }

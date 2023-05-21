@@ -34,10 +34,14 @@ class CategorieDeServices
     #[ORM\OneToMany(mappedBy: 'CategorieDeServices', targetEntity: Promotion::class)]
     private Collection $promotions;
 
+    #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Images::class)]
+    private Collection $image;
+
     public function __construct()
     {
         $this->proposers = new ArrayCollection();
         $this->promotions = new ArrayCollection();
+        $this->image = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,6 +151,36 @@ class CategorieDeServices
             // set the owning side to null (unless already changed)
             if ($promotion->getCategorieDeServices() === $this) {
                 $promotion->setCategorieDeServices(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Images>
+     */
+    public function getImage(): Collection
+    {
+        return $this->image;
+    }
+
+    public function addImage(Images $image): self
+    {
+        if (!$this->image->contains($image)) {
+            $this->image->add($image);
+            $image->setCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): self
+    {
+        if ($this->image->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getCategorie() === $this) {
+                $image->setCategorie(null);
             }
         }
 

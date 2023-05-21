@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 use App\Entity\CodePostal;
 use App\Entity\Prestataire;
@@ -33,7 +34,7 @@ class InscriptionType extends AbstractType
         ->add('AdresseNumber', IntegerType::class, [
             'label' => 'Numéro de rue'
         ]) 
-        //utilise le json pour choisir la ville et la region et le cp se mettra en automatique       
+              
         ->add('region', EntityType::class, [
             'class' => Region::class,
             'label' => 'Région :  ',
@@ -56,6 +57,13 @@ class InscriptionType extends AbstractType
                 'label' => 'Code Postal :  ',
                 'choice_label' => 'codePostal', // la propriété de l'entité à afficher dans le champ
                 'choice_value' => 'codePostal',
+            ])
+
+            ->add('Image', FileType::class, [
+                'label' => 'Photo de profil',
+                'multiple' => false,
+                'mapped' => false,
+                'required' => false
             ])
             ->add('Prestataire', ChoiceType::class, [
                 'label' => 'Êtes-vous un prestataire ?',
@@ -86,6 +94,13 @@ class InscriptionType extends AbstractType
             ->add('SiteInternet', TextType::class, [
                 'label' => 'Site internet',
                 'required' => false,
+            ])
+
+            ->add('Logo', FileType::class, [
+                'label' => 'Logo',
+                'multiple' => false,
+                'mapped' => false,
+                'required' => false
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer'

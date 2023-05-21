@@ -5,6 +5,9 @@ namespace App\Repository;
 use App\Entity\Prestataire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+
 
 /**
  * @extends ServiceEntityRepository<Prestataire>
@@ -16,9 +19,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PrestataireRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry,  private VilleRepository $villeRepository, private PaginatorInterface $paginatorInterface)
     {
         parent::__construct($registry, Prestataire::class);
+        $this->villeRepository = $villeRepository;
+        
     }
 
     public function save(Prestataire $entity, bool $flush = false): void
@@ -38,6 +43,67 @@ class PrestataireRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function findByVille($ville, $page = 1): PaginationInterface
+    {
+        
+        $qb = $this->createQueryBuilder('p')
+        ->join('p.utilisateurs', 'u')
+        ->join('u.ville', 'v')        
+        ->where('v.VilleName = :val')
+        ->setParameter('val', $ville)
+        ;
+
+        
+
+        return $this->paginatorInterface->paginate($qb, $page, 3);     
+    }
+
+    public function findByPrestataire($prestataire, $page = 1): PaginationInterface
+    {
+        
+        $qb = $this->createQueryBuilder('p')
+        ->join('p.utilisateurs', 'u')
+        ->join('u.ville', 'v')        
+        ->where('p.Nom = :val')
+        ->setParameter('val', $prestataire)
+        ;
+
+        
+
+        return $this->paginatorInterface->paginate($qb, $page, 3);     
+    }
+    
+    public function findByCP($cp, $page = 1): PaginationInterface
+    {
+        
+        $qb = $this->createQueryBuilder('p')
+        ->join('p.utilisateurs', 'u')
+        ->join('u.codePostal', 'cp')        
+        ->where('cp.CodePostal = :val')
+        ->setParameter('val', $cp)
+        ;
+
+        
+
+        return $this->paginatorInterface->paginate($qb, $page, 3);     
+    }
+
+    public function findByRegion($region, $page = 1): PaginationInterface
+    {
+        
+        $qb = $this->createQueryBuilder('p')
+        ->join('p.utilisateurs', 'u')
+        ->join('u.region', 'r')        
+        ->where('r.regionName = :val')
+        ->setParameter('val', $region)
+        ;
+
+        
+
+        return $this->paginatorInterface->paginate($qb, $page, 3);     
+    }
+
 
 //    /**
 //     * @return Prestataire[] Returns an array of Prestataire objects

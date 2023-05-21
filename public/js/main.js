@@ -3,11 +3,11 @@ var menuMain = document.getElementById("mainMenu");
 
 if(menuHam != null && menuMain!= null) {
 	menuHam.addEventListener('click', function(e){
-		if(menuMain.className == 'containerSearch is-active') {
-			menuMain.className = 'containerSearch';
+		if(menuMain.className == 'navigation is-active') {
+			menuMain.className = 'navigation';
 		}
 		else {
-			menuMain.className = 'containerSearch is-active';
+			menuMain.className = 'navigation is-active';
 		}
 	});
 }

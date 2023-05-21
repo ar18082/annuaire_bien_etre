@@ -60,6 +60,15 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\ManyToOne(inversedBy: 'utilisateurs')]
+    private ?Ville $ville = null;
+
+    #[ORM\ManyToOne(inversedBy: 'utilisateurs')]
+    private ?Region $region = null;
+
+    #[ORM\ManyToOne(inversedBy: 'utilisateurs')]
+    private ?CodePostal $codePostal = null;
+
     public function __construct()
     {
         $this->inscription = new \DateTime(); 
@@ -254,6 +263,47 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getVille(): ?Ville
+    {
+        return $this->ville;
+    }
+
+    public function setVille(?Ville $ville): self
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public Function __toString(){
+        
+        return $this->ville;
+    }
+
+    public function getRegion(): ?Region
+    {
+        return $this->region;
+    }
+
+    public function setRegion(?Region $region): self
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    public function getCodePostal(): ?CodePostal
+    {
+        return $this->codePostal;
+    }
+
+    public function setCodePostal(?CodePostal $codePostal): self
+    {
+        $this->codePostal = $codePostal;
 
         return $this;
     }

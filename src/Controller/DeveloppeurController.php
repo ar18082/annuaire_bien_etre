@@ -7,14 +7,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Annotation\IsGranted;
+use Symfony\Component\HttpFoundation\Request;
+
 
 
 //Entity
 use App\Entity\Ville;
 use App\Entity\CodePostal;
-
+use App\Entity\Images;
 use App\Entity\Region;
+use App\Entity\Utilisateur;
+use App\Form\ImageType;
 
 class DeveloppeurController extends AbstractController
 {
@@ -142,6 +145,85 @@ class DeveloppeurController extends AbstractController
             'message' => 'Importation réussie',
         ]);
     }
+
+    #[Route('/developpeurUtilisateur', name: 'app_developpeurUtilisateur')]
+    public function devUtilisateur(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $repository = $entityManager->getRepository(Utilisateur::class);
+        $utilisateur = $repository->findBy(['ville' => 184 ]);
+
+        $image = new Images;
+        $form = $this->createForm(ImageType::class, $image);
+        $form->handleRequest($request);
+
+        dd($image);
+
+        if($form -> isSubmitted() ){
+            // get data et traitement des date vers les différents entity 
+            $data = $form->getData();
+
+
+            
+
+            return $this->redirectToRoute('app_developpeurUtilisateur');
+            
+
+        }
+        
+
+        return $this->render('developpeur/devUtilisateur.html.twig', [
+            'controller_name' => 'devUtilisateur',
+            'utilisateur' => $utilisateur,
+            'form'   =>  $form->  createView(), 
+        ]);
+    }
+
+
+    #[Route('/developpeurImages', name: 'app_developpeurImages')]
+    public function devImage(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(ImageType::class);
+        $form->handleRequest($request);
+
+        if($form -> isSubmitted() && $form-> isValid()){
+            // get data et traitement des date vers les différents entity 
+            $image = $form->get('Image')->getData();
+
+            /*
+             if dans l'utilisateur prestataire est null alors le nom du fichier sera 'internaute_(id).'.$image->guessExtension()
+             else 'prestataire_(id).'.$image->guessExtension()
+             */
+                $fichier =  'logo_prestataire.' . $image->guessExtension();
+
+                
+
+                $image->move(
+                    'img/logo',
+                    $fichier
+                );
+
+                $img = new Images();
+                $img-> setImageName($fichier);
+
+                $entityManager->persist($img);
+                $entityManager->flush();
+             
+            
+
+
+            return $this->redirectToRoute('app_developpeurImages');
+            
+
+        }
+        
+
+        return $this->render('developpeur/devImages.html.twig', [            
+            'form'   =>  $form->  createView(),  
+            
+        ]);
+    }
+
+
 }
 
 
